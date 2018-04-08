@@ -1,1 +1,1 @@
-*/5 * * * * bash -c 'cd ~/public_html/hivemind/backend && timeout 5m ./run_census > /dev/null' 
+*/5 * * * * bash -c 'cd ~/hivemind/backend && timeout 5m ./run_census > /dev/null'

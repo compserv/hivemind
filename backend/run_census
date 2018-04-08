@@ -2,6 +2,6 @@
 
 TIME=`date +%s`
 
-python census.py > ~/public_html/hivemind/data/historical/$TIME.json
+./../venv/bin/python census.py > ~/public_html/hivemind/data/historical/$TIME.json
 
 cp ~/public_html/hivemind/data/historical/$TIME.json ~/public_html/hivemind/data/latest.json
