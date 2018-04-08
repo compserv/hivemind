@@ -32,13 +32,13 @@
   <div id="top">
     <div class="container">
       <a href="#" id="title">Hivemind</a>
-      <a href="https://github.com/guoguo12/hivemind" id="gh-link" target="_blank">View on GitHub</a>
+      <a href="https://github.com/compserv/hivemind" id="gh-link" target="_blank">View on GitHub</a>
     </div>
   </div>
 
   <div class="container" id="main" v-cloak>
     <div class="row box warning" v-if="offline && dataLoaded">
-      <p>Hivemind is currently not being updated. Operations will resume in August 2017.</p>
+      <p>Hivemind is currently not being updated. Operations will resume in August 2018.</p>
       <p>The data below is from <b>{{ lastUpdate | formatTime }}</b>.</p>
     </div>
     <div class="row box" v-else>
@@ -52,7 +52,7 @@
     </div>
     <div class="row box warning" v-if="failed">
       <p>Couldn't retrieve latest data. Try again later?</p>
-      <p>If the issue persists, please email the author at <a href="mailto:guoguo12@gmail.com">guoguo12@gmail.com</a>.</p>
+      <p>If the issue persists, please email HKN at <a href="mailto:compserv@hkn.eecs.berkeley.edu">compserv@hkn.eecs.berkeley.edu</a>.</p>
     </div>
 
     <div class="row" v-if="dataLoaded">
