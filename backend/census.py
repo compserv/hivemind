@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """census.py - SSH into servers, grab vital stats, then print to stdout."""
 
 import json
@@ -7,20 +5,22 @@ import logging
 import multiprocessing.dummy
 import time
 
-import pysftp
+import paramiko
+
+from os.path import expanduser
 
 SERVER_LIST = 'servers.txt'
 HOST_SUFFIX = '.berkeley.edu'
-LOGIN_USERNAME = 'cs199-auk'
-LOGIN_KEY_PATH = 'private/id_rsa'
+LOGIN_USERNAME = 'hivemind'
+LOGIN_KEY_PATH = expanduser('~') + '/.ssh/hivemind_rsa'
 
 LOG_PATH = 'output.log'
 LOG_LEVEL = logging.INFO
 
-EXEC_CMD = 'cat /proc/{uptime,loadavg} && who -q && cat /proc/cpuinfo | grep "model name" | wc -l'
+EXEC_CMD = 'cat /proc/{uptime,loadavg} && who -q && getconf _NPROCESSORS_ONLN'
 EXPECTED_OUTPUT_LINES = 5
 
-THREAD_COUNT = 8
+THREAD_COUNT = 20
 
 
 def read_servers(list_path=SERVER_LIST):
@@ -28,7 +28,7 @@ def read_servers(list_path=SERVER_LIST):
     Reads SERVER_LIST by default.
     """
     with open(list_path, 'r') as list:
-        return map(lambda s: s.strip(), list.readlines())
+        return [server.strip() for server in list.readlines()]
 
 
 def poll(host):
@@ -38,22 +38,33 @@ def poll(host):
     """
     t_start = time.time()
     logging.info('Starting poll of %s' % host)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    privkey = paramiko.RSAKey.from_private_key_file(LOGIN_KEY_PATH)
+    ssh.connect(
+        hostname=host + HOST_SUFFIX,
+        username=LOGIN_USERNAME,
+        pkey=privkey,
+    )
 
-    with pysftp.Connection(host + HOST_SUFFIX, username=LOGIN_USERNAME,
-                           private_key=LOGIN_KEY_PATH) as sftp:
-        result = sftp.execute(EXEC_CMD)
-        if len(result) != EXPECTED_OUTPUT_LINES:
-            raise ValueError('Server output has wrong number of lines: %r'
-                             % result)
-        result = map(lambda s: s.rstrip('\n'), result)
+    stdin, stdout, stderr = ssh.exec_command(EXEC_CMD)
+    result = stdout.readlines()
 
-        uptime = float(result[0].split(' ')[0])  # in seconds
-        num_cpus = float(result[4])
-        loadavgs = [float(avg) / num_cpus for avg in result[1].split(' ')[:3]]  # over last 15 minutes
-        users = [] if not result[2] else list(set(result[2].split(' ')))
-        data = {'uptime': uptime,
-                'load_avgs': loadavgs,
-                'users': users}
+    if len(result) != EXPECTED_OUTPUT_LINES:
+        raise ValueError('Server output has wrong number of lines: %r'
+                         % result)
+
+    result = [s.rstrip('\n') for s in result]
+
+    uptime = float(result[0].split(' ')[0])  # in seconds
+    num_cpus = float(result[4])
+    loadavgs = [float(avg) / num_cpus for avg in result[1].split(' ')[:3]]  # over last 15 minutes
+    users = [] if not result[2] else list(set(result[2].split(' ')))
+    data = {
+        'uptime': uptime,
+        'load_avgs': loadavgs,
+        'users': users,
+    }
 
     t_elapsed = time.time() - t_start
     logging.info('Finished poll of %s successfully in %fs' % (host, t_elapsed))
@@ -62,7 +73,12 @@ def poll(host):
 if __name__ == '__main__':
     """Reads list of servers, then grabs data from each one. Prints the combined
     data in JSON format to stdout and writes a log to LOG_PATH."""
-    logging.basicConfig(filename=LOG_PATH, level=LOG_LEVEL)
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        filename=LOG_PATH,
+        level=LOG_LEVEL,
+    )
     results = {'time_begin': time.time(), 'data': {}}
 
     def task(server):
@@ -87,4 +103,4 @@ if __name__ == '__main__':
     pool.join()
 
     results['time_elapsed'] = time.time() - results['time_begin']
-    print json.dumps(results, sort_keys=True)
+    print(json.dumps(results, sort_keys=True))

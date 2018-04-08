@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 TIME=`date +%s`
-python census.py > ../data/historical/$TIME.json
 
-cp ../data/historical/$TIME.json ../data/latest.json
-echo $?
+python census.py > ~/public_html/hivemind/data/historical/$TIME.json
 
+cp ~/public_html/hivemind/data/historical/$TIME.json ~/public_html/hivemind/data/latest.json
