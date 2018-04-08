@@ -1,7 +1,7 @@
 # Hivemind
 
 **Hivemind** displays usage stats for the Berkeley EECS instructional
-computers. It was originally developed by [Allen Guo][allen-guo] but is now
+computers. It was originally developed by [Allen Guo][allen-guo] and is now
 maintained by [HKN's Compserv committee][hkn-compserv].
 
 [allen-guo]: https://github.com/guoguo12
@@ -37,14 +37,15 @@ the project root directory.
 The backend (i.e. the script that grabs data from the servers) is a little
 harder to set up:
 
-0. Install [paramiko](https://pypi.python.org/pypi/paramiko) via `pip install
+0. Clone this repo.
+1. Install [paramiko](https://pypi.python.org/pypi/paramiko) via `pip install
    paramiko`.
-1. Clone this repo and navigate to `backend/`.
-2. Make a directory called `private/`.
-3. Create an RSA key pair (`id_rsa` and `id_rsa.pub`) inside `private/` with no
-   passphrase.
-4. Add the public key to your class account's `~/.ssh/authorized_keys` file.
-5. Change the value of `LOGIN_USERNAME` in `census.py` to your login.
+2. Create an RSA key pair with no passphrase, rename the private key to
+   `hivemind_rsa` and the public key to `hivemind_rsa.pub` and put them inside
+   your home directory's SSH directory (`~/.ssh`).
+3. Add the public key to your class account's `~/.ssh/authorized_keys` file to
+   allow hivemind to log in to the servers automatically.
+4. Change the value of `LOGIN_USERNAME` in `census.py` to your login.
 
 You should then be able to execute `census.py` to grab data from each server in
 `servers.txt`. The results are printed to stdout, which `run_census` puts into
@@ -55,5 +56,5 @@ a file for the frontend to fetch.
 
 Hivemind was made using jQuery, Vue.js, Moment.js, Skeleton, clipboard.js, and Hint.css.
 
-Hivemind was originally developed by [Allen Guo][allen-guo] but is now
+Hivemind was originally developed by [Allen Guo][allen-guo] and is now
 maintained by [HKN's Compserv committee][hkn-compserv].
