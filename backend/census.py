@@ -103,4 +103,5 @@ if __name__ == '__main__':
     pool.join()
 
     results['time_elapsed'] = time.time() - results['time_begin']
+    logging.info('===== Finished in %fs' % results['time_elapsed'])
     print(json.dumps(results, sort_keys=True))
