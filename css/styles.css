@@ -1,0 +1,163 @@
+/**
+ * STYLES.CSS -- Hivemind
+ * Allen Guo <allenguo@berkeley.edu>
+ */
+
+html, body {
+    background-color: #FCFCFC;
+    color: black;
+    font-size: 62.5%;
+    min-width: 600px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;     
+    font-family: "Helvetica", "Open Sans", sans-serif;
+}
+
+::selection {
+    background: yellow;
+}
+
+::-moz-selection {
+    background: yellow;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+a, a:hover {
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.dashed.hint--bottom {
+    border-bottom: 0.1rem dashed #222;
+}
+
+input {
+    margin-top: 2.5rem;
+    border: none;
+    border-bottom: 0.1rem solid #AAA;
+    outline: none;
+    background-color: transparent;
+}
+
+input:focus {
+    border-bottom: 0.1rem solid #222;
+}
+
+th {
+    cursor: pointer;
+}
+
+th::after {
+    content: url('../images/bg.gif');;
+}
+
+th.headerSortDown::after {
+    content: url('../images/desc.gif');
+}
+
+th.headerSortUp::after {
+    content: url('../images/asc.gif');;
+}
+
+#top {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 8rem;
+    background-color: #050505;
+    color: white;
+    line-height: 8rem;
+    min-width: 60rem;
+    font-size: 3em;
+}
+
+@media screen and (min-device-width: 1200px) {
+    #top {
+        position: fixed;
+        z-index: 1;
+    }
+}
+
+#top #gh-link {
+    color: white;
+    float: right;
+}
+
+#title {
+    font-size: 1.8em;
+    font-weight: normal;
+}
+
+#main {
+    margin-top: 11rem;
+    font-size: 2.8em;
+}
+
+#footer { /** Actually inside #main **/
+    font-size: 0.75em;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.click {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.box {
+    margin-bottom: 2rem;
+    border-left: 0.6rem solid black;
+    padding-left: 1.5rem;
+    color: black;
+    font-size: 1.15em;
+}
+
+.box.warning {
+    border-left-color: #D32F2F;
+    color: #D32F2F;
+}
+
+.box.info {
+    border-left-color: #1A237E;
+    color: #1A237E;
+}
+
+.box p {
+    margin: 0.5em 0 0 0;
+    line-height: 120%;
+}
+
+.rating {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9em;
+    letter-spacing: 0.05em;
+}
+
+.rating-3 {
+    color: #666;
+}
+
+.rating-2 {
+    color: #D32F2F;
+}
+
+.rating-1 {
+    color: #F57C00;
+}
+
+.rating-0 {
+    color: #388E3C;
+}

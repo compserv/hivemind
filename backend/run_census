@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+TIME=`date +%s`
+python census.py > ../data/historical/$TIME.json
+
+cp ../data/historical/$TIME.json ../data/latest.json
+echo $?
+
