@@ -1,4 +1,4 @@
-var DATA_URL = 'https://www.ocf.berkeley.edu/~hkn/hivemind/data/latest.json';
+var DATA_URL = './data/latest.json';
 
 var OFFLINE = false;
 
