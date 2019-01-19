@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-TIME=`date +%s`
+TIME=$(date +%s)
+OUTFILE="$HOME/public_html/hivemind/data/historical/$TIME.json"
+LATEST="$HOME/public_html/hivemind/data/latest.json"
 
-./../venv/bin/python census.py > ~/public_html/hivemind/data/historical/$TIME.json
+./../venv/bin/python census.py > "$OUTFILE"
 
-cp ~/public_html/hivemind/data/historical/$TIME.json ~/public_html/hivemind/data/latest.json
+if [ -s "$OUTFILE" ]; then
+  cp "$OUTFILE" "$LATEST"
+fi
