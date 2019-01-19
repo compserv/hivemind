@@ -1,4 +1,7 @@
-output.log
-
+backend/*.gz
+backend/*.log
+backend/*.log.1
+backend/.nfs*
 data/
+output.log
 venv/
