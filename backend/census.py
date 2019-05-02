@@ -7,14 +7,15 @@ import time
 
 import paramiko
 
-from os.path import expanduser
+import os
 
-SERVER_LIST = 'servers.txt'
+DIR = os.path.dirname(os.path.realpath(__file__))
+SERVER_LIST = os.path.join(DIR, 'servers.txt')
 HOST_SUFFIX = '.berkeley.edu'
 LOGIN_USERNAME = 'hivemind'
-LOGIN_KEY_PATH = expanduser('~') + '/.ssh/hivemind_rsa'
+LOGIN_KEY_PATH = os.path.expanduser('~') + '/.ssh/hivemind_rsa'
 
-LOG_PATH = 'output.log'
+LOG_PATH = os.path.join(os.path.dirname(DIR), 'log', 'output.log')
 LOG_LEVEL = logging.INFO
 
 EXEC_CMD = 'cat /proc/{uptime,loadavg} && who -q && getconf _NPROCESSORS_ONLN'
