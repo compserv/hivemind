@@ -1,0 +1,7 @@
+[Unit]
+Description=hivemind census
+ConditionHost=vampires
+
+[Service]
+Type=oneshot
+ExecStart=timeout 4m /home/h/hk/hkn/hivemind/backend/run_census > /dev/null
