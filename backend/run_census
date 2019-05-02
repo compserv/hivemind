@@ -3,8 +3,9 @@
 TIME=$(date +%s)
 OUTFILE="$HOME/public_html/hivemind/data/historical/$TIME.json"
 LATEST="$HOME/public_html/hivemind/data/latest.json"
+DIR=$(dirname $0)
 
-$(dirname $0)/../venv/bin/python census.py > "$OUTFILE"
+$DIR/../venv/bin/python $DIR/census.py > "$OUTFILE"
 
 if [ -s "$OUTFILE" ]; then
   cp "$OUTFILE" "$LATEST"
