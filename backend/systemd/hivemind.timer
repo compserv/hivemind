@@ -2,7 +2,9 @@
 Description=Run hivemind every 10 min
 
 [Timer]
+OnBootSec=10min
 OnUnitActiveSec=10min
+Unit=hivemind.service
 
 [Install]
 WantedBy=timers.target

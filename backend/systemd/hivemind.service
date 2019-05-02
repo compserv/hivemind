@@ -4,4 +4,5 @@ ConditionHost=vampires
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/timeout 4m /home/h/hk/hkn/hivemind/backend/run_census > /dev/null
+ExecStart=/home/h/hk/hkn/hivemind/backend/run_census > /dev/null
+TimeoutSec=5m
