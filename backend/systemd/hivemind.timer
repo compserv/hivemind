@@ -2,7 +2,7 @@
 Description=Run hivemind every 5 min
 
 [Timer]
-OnActiveSec=5min
+OnUnitActiveSec=5min
 
 [Install]
 WantedBy=timers.target
