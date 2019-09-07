@@ -3,6 +3,8 @@
 import json
 import logging
 import multiprocessing.dummy
+import socket
+import subprocess
 import time
 
 import paramiko
@@ -16,7 +18,8 @@ LOGIN_USERNAME = 'hivemind'
 LOGIN_KEY_PATH = os.path.expanduser('~') + '/.ssh/hivemind_rsa'
 
 LOG_PATH = os.path.join(os.path.dirname(DIR), 'log', 'output.log')
-LOG_LEVEL = logging.INFO
+LOG_LEVEL_SCRIPT = logging.INFO
+LOG_LEVEL_PARAMIKO = logging.WARNING
 
 EXEC_CMD = 'cat /proc/{uptime,loadavg} && who -q && getconf _NPROCESSORS_ONLN'
 EXPECTED_OUTPUT_LINES = 5
@@ -33,30 +36,52 @@ def read_servers(list_path=SERVER_LIST):
 
 
 def poll(host):
-    """Collects data from the given server by SSH-ing in (using pysftp) and
-    running the EXEC_CMD. Returns a tuple: the first member is the output as
-    a list of strings; the second is the elapsed time in seconds.
+    """Collects data from the given server by first pinging it to see if it is
+    up or not, and then SSH-ing in and running the EXEC_CMD.
     """
     t_start = time.time()
-    logging.info('Starting poll of %s' % host)
+    fqdn = host + HOST_SUFFIX
+
+    # Ping the server first to see if it is up or not before trying to SSH.
+    # This should cut down on the number of extra SSH connections made, which
+    # to EECS ISP can look malicious (they all come from one IP, periodically,
+    # and consistently fail). Also see the description in
+    # https://github.com/compserv/hivemind/commit/34b72312d9e
+    logging.info('Starting ping of {}'.format(fqdn))
+    # Only send one ping packet with a timeout, if it's dropped or there's no
+    # response in the time, then we consider the host unreachable
+    if subprocess.run(['ping', fqdn, '-c', '1', '-W', '5']).returncode != 0:
+        logging.warn('Could not ping {}, skipping'.format(fqdn))
+        return
+
+    logging.info('Starting SSH login to {}'.format(fqdn))
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     privkey = paramiko.RSAKey.from_private_key_file(LOGIN_KEY_PATH)
-    ssh.connect(
-        hostname=host + HOST_SUFFIX,
-        username=LOGIN_USERNAME,
-        pkey=privkey,
-        timeout=10,
-        banner_timeout=5,
-        auth_timeout=5,
-    )
+    try:
+        ssh.connect(
+            hostname=fqdn,
+            username=LOGIN_USERNAME,
+            pkey=privkey,
+            timeout=10,
+            banner_timeout=5,
+            auth_timeout=5,
+        )
+    except (paramiko.SSHException, socket.error) as e:
+        logging.warn('Got an exception connecting to this host: {}'.format(e))
 
     stdin, stdout, stderr = ssh.exec_command(EXEC_CMD)
     result = stdout.readlines()
 
     if len(result) != EXPECTED_OUTPUT_LINES:
-        raise ValueError('Server output has wrong number of lines: %r'
-                         % result)
+        logging.warn(
+            'Server output for {} has wrong number of lines ({}), expected {}, skipping'.format(
+                fqdn,
+                result,
+                EXPECTED_OUTPUT_LINES,
+            )
+        )
+        return
 
     result = [s.rstrip('\n') for s in result]
 
@@ -71,8 +96,11 @@ def poll(host):
     }
 
     t_elapsed = time.time() - t_start
-    logging.info('Finished poll of %s successfully in %fs' % (host, t_elapsed))
+    logging.info(
+            'Finished poll of {} successfully in {0:.2f} seconds'.format(fqdn, t_elapsed)
+    )
     return data, t_elapsed
+
 
 if __name__ == '__main__':
     """Reads list of servers, then grabs data from each one. Prints the combined
@@ -81,8 +109,10 @@ if __name__ == '__main__':
         format='%(asctime)s %(levelname)-8s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
         filename=LOG_PATH,
-        level=LOG_LEVEL,
+        level=LOG_LEVEL_SCRIPT,
     )
+    # Don't give as verbose logs from paramiko as from this script
+    logging.getLogger('paramiko').setLevel(LOG_LEVEL_PARAMIKO)
     results = {'time_begin': time.time(), 'data': {}}
 
     def task(server):
@@ -107,5 +137,5 @@ if __name__ == '__main__':
     pool.join()
 
     results['time_elapsed'] = time.time() - results['time_begin']
-    logging.info('===== Finished in %fs' % results['time_elapsed'])
+    logging.info('===== Finished in {0:.2f} seconds'.format(results['time_elapsed']))
     print(json.dumps(results, sort_keys=True))
