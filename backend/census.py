@@ -73,7 +73,7 @@ def poll(host):
             auth_timeout=5,
         )
     except (paramiko.SSHException, socket.error) as e:
-        logging.warn('Got an exception connecting to this host: {}'.format(e))
+        logging.warn('Got an exception connecting to {}: {}'.format(fqdn, e))
 
     stdin, stdout, stderr = ssh.exec_command(EXEC_CMD)
     result = stdout.readlines()
