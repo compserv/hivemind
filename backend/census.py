@@ -74,6 +74,7 @@ def poll(host):
         )
     except (paramiko.SSHException, socket.error) as e:
         logging.warn('Got an exception connecting to {}: {}'.format(fqdn, e))
+        return
 
     stdin, stdout, stderr = ssh.exec_command(EXEC_CMD)
     result = stdout.readlines()
@@ -102,7 +103,7 @@ def poll(host):
 
     t_elapsed = time.time() - t_start
     logging.info(
-            'Finished poll of {} successfully in {0:.2f} seconds'.format(fqdn, t_elapsed)
+        'Finished poll of {} successfully in {:.2f} seconds'.format(fqdn, t_elapsed)
     )
     return data, t_elapsed
 
@@ -123,7 +124,10 @@ if __name__ == '__main__':
     def task(server):
         try:
             return server, poll(server)
-        except:
+        except Exception as e:
+            logging.warn(
+                'Caught exception outside poll() for {}: {}'.format(server, e)
+            )
             return server, None
 
     def callback(callback_results):
@@ -142,5 +146,5 @@ if __name__ == '__main__':
     pool.join()
 
     results['time_elapsed'] = time.time() - results['time_begin']
-    logging.info('===== Finished in {0:.2f} seconds'.format(results['time_elapsed']))
+    logging.info('===== Finished in {:.2f} seconds'.format(results['time_elapsed']))
     print(json.dumps(results, sort_keys=True))
