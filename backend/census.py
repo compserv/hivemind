@@ -50,7 +50,12 @@ def poll(host):
     logging.info('Starting ping of {}'.format(fqdn))
     # Only send one ping packet with a timeout, if it's dropped or there's no
     # response in the time, then we consider the host unreachable
-    if subprocess.run(['ping', fqdn, '-c', '1', '-W', '5']).returncode != 0:
+    ping_call = subprocess.run(
+        ['ping', fqdn, '-c', '1', '-W', '5'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if ping_call.returncode != 0:
         logging.warn('Could not ping {}, skipping'.format(fqdn))
         return
 
