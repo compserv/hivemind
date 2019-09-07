@@ -1,4 +1,3 @@
-cory.eecs
 hive1.cs
 hive2.cs
 hive3.cs
@@ -164,9 +163,13 @@ s277-29.cs
 s277-30.cs
 ashby.cs
 cedar.cs
+cory.eecs
 derby.cs
 hearst.cs
 gilman.cs
+oxford.cs
+solano.cs
+ward.cs
 hpse-9.eecs
 hpse-10.eecs
 hpse-11.eecs
