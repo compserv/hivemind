@@ -3,5 +3,6 @@ backend/*.log
 backend/*.log.1
 backend/.nfs*
 data/
+log/
 output.log
 venv/
