@@ -46,6 +46,9 @@ def poll(host):
         hostname=host + HOST_SUFFIX,
         username=LOGIN_USERNAME,
         pkey=privkey,
+        timeout=10,
+        banner_timeout=5,
+        auth_timeout=5,
     )
 
     stdin, stdout, stderr = ssh.exec_command(EXEC_CMD)
