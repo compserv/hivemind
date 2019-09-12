@@ -177,3 +177,11 @@ hpse-12.eecs
 hpse-13.eecs
 hpse-14.eecs
 hpse-15.eecs
+eda-1.eecs
+eda-2.eecs
+eda-3.eecs
+eda-4.eecs
+eda-5.eecs
+eda-6.eecs
+eda-7.eecs
+eda-8.eecs
