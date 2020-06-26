@@ -67,4 +67,8 @@ a file for the frontend to fetch.
 Hivemind was made using jQuery, Vue.js, Moment.js, Skeleton, clipboard.js, and Hint.css.
 
 Thanks to [Allen Guo][allen-guo], the original author, and the [OCF][ocf] for their
-generous support and service for UC Berkeley students, faculty, and staff.
+generous support and hosting.
+
+This site was developed with the support of the [EECS Instructional Support Group][isg].
+
+[isg]: https://inst.eecs.berkeley.edu/ 
