@@ -9,7 +9,6 @@ maintained by [HKN's Compserv committee][hkn-compserv] and hosted by the
 [hkn-compserv]: https://hkn.eecs.berkeley.edu/about/officers
 [ocf]: https://www.ocf.berkeley.edu
 
-
 ## How does it work?
 
 Every five minutes, `backend/census.py` is executed. It connects to each server
@@ -22,7 +21,6 @@ You can view the most recently generated JSON file here:
 
 [latest]: https://www.ocf.berkeley.edu/~hkn/hivemind/data/latest.json
 
-
 ### Overall load formula
 
 The "overall load" heuristic is implemented in `toRating()` in
@@ -30,8 +28,16 @@ The "overall load" heuristic is implemented in `toRating()` in
 
 [main-js]: https://github.com/compserv/hivemind/blob/gh-pages/js/main.js
 
+## Contributing
 
-## How to contribute
+If you would like to add / remove servers from the list, please file
+an issue or a pull request with your requested changes.
+
+The current list of servers is at [backend/servers.txt][servers.txt].
+
+[servers.txt]: https://github.com/compserv/hivemind/blob/master/backend/servers.txt
+
+## Development
 
 Want to host the website locally? Clone this repo, and start a web server in
 the project root directory.
@@ -60,6 +66,5 @@ a file for the frontend to fetch.
 
 Hivemind was made using jQuery, Vue.js, Moment.js, Skeleton, clipboard.js, and Hint.css.
 
-Hivemind was originally developed by [Allen Guo][allen-guo] and is now
-maintained by [HKN's Compserv committee][hkn-compserv] and hosted by the
-[OCF][ocf].
+Thanks to [Allen Guo][allen-guo], the original author, and the [OCF][ocf] for their
+generous support and service for UC Berkeley students, faculty, and staff.
