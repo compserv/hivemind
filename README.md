@@ -26,7 +26,7 @@ You can view the most recently generated JSON file here:
 The "overall load" heuristic is implemented in `toRating()` in
 [`main.js`][main-js].
 
-[main-js]: https://github.com/compserv/hivemind/blob/gh-pages/js/main.js
+[main-js]: https://github.com/compserv/hivemind/blob/master/js/main.js
 
 ## Contributing
 
