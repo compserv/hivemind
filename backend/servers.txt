@@ -169,14 +169,6 @@ hearst.cs
 gilman.cs
 oxford.cs
 solano.cs
-ward.cs
-hpse-9.eecs
-hpse-10.eecs
-hpse-11.eecs
-hpse-12.eecs
-hpse-13.eecs
-hpse-14.eecs
-hpse-15.eecs
 eda-1.eecs
 eda-2.eecs
 eda-3.eecs
