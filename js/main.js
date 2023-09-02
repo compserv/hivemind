@@ -161,6 +161,8 @@ var app = new Vue({
 });
 
 function getQueryParam(name) {
+  // Could use URLSearchParams if IE is considered dead
+  // but dumb querystring parsing is also not too bad...
   var params = window.location.search.substring(1).split('&');
   for (var i = 0; i < params.length; i++) {
     var param = params[i].split('=', 2);
