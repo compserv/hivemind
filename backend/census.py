@@ -15,7 +15,7 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 SERVER_LIST = os.path.join(DIR, 'servers.txt')
 HOST_SUFFIX = '.berkeley.edu'
 LOGIN_USERNAME = 'hivemind'
-LOGIN_KEY_PATH = os.path.expanduser('~') + '/.ssh/hivemind_rsa'
+LOGIN_KEY_PATH = os.path.expanduser('~') + '/.ssh/hivemind_ed25519'
 
 LOG_PATH = os.path.join(os.path.dirname(DIR), 'log', 'output.log')
 LOG_LEVEL_SCRIPT = logging.INFO
@@ -62,7 +62,7 @@ def poll(host):
     logging.info('Starting SSH login to {}'.format(fqdn))
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    privkey = paramiko.RSAKey.from_private_key_file(LOGIN_KEY_PATH)
+    privkey = paramiko.Ed25519Key.from_private_key_file(LOGIN_KEY_PATH)
     try:
         ssh.connect(
             hostname=fqdn,
