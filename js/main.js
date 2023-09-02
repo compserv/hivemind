@@ -151,8 +151,26 @@ var app = new Vue({
   },
   watch: {
     filteredServers: activateAllClipboards
+  },
+  created() {
+    let search = getQueryParam('search');
+    if (search) {
+      this.search = search;
+    }
   }
 });
+
+function getQueryParam(name) {
+  // Could use URLSearchParams if IE is considered dead
+  // but dumb querystring parsing is also not too bad...
+  var params = window.location.search.substring(1).split('&');
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i].split('=', 2);
+    if (param[0] === name) {
+      return decodeURIComponent(param[1]);
+    }
+  }
+}
 
 function activateAllClipboards() {
   // TODO: Get the timing to work without setTimeout
