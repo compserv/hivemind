@@ -68,9 +68,7 @@ def poll(host):
             hostname=fqdn,
             username=LOGIN_USERNAME,
             pkey=privkey,
-            timeout=10,
-            banner_timeout=5,
-            auth_timeout=5,
+            timeout=20,
         )
     except (paramiko.SSHException, socket.error) as e:
         logging.warn('Got an exception connecting to {}: {}'.format(fqdn, e))
